@@ -1,0 +1,29 @@
+{
+  "name": "mystery-gifter",
+  "version": "1.0.0",
+  "description": "Very simple Discord bot to manage mystery gifting",
+  "main": "mystery.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix --quiet *.js commands"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AardWolf/mystery-gifter.git"
+  },
+  "author": "Rob Wilson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AardWolf/mystery-gifter/issues"
+  },
+  "homepage": "https://github.com/AardWolf/mystery-gifter#readme",
+  "dependencies": {
+    "@discordjs/builders": "^0.8.2",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "discord-api-types": "^0.24.0",
+    "discord.js": "^13.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.3.0"
+  }
+}
