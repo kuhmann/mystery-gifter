@@ -2,5 +2,6 @@
     "token": "from your bot account",
     "clientId": "your bot's application Id",
     "guildId": "You guild's id, used for registering commands",
-    "channelId": "channel id for registration responses"
+    "channelId": "channel id for registration responses",
+    "signupsActive": true
 }
