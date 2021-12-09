@@ -8,7 +8,6 @@ client.commands = new Collection();
 client.channelId = channelId;
 client.signupsActive = signupsActive;
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     if (command.load) {

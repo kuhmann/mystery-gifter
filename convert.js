@@ -8,7 +8,7 @@ fs.readFile('notes/assignments.txt', 'utf8', function(err, data) {
         const values = line.split(/\t/);
         buyers[values[3]] = {
             'buyer': values[0],
-            'hunterId': values[1],
+            'hunterId': values[4],
             'wishlist': '',
         };
     });
