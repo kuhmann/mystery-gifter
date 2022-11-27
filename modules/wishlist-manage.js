@@ -164,3 +164,5 @@ exports.stalk = stalk;
 exports.dump = dump_as_csv_string;
 exports.reveal = reveal;
 exports.peek = peek;
+exports.register = register;
+exports.deregister = deregister;

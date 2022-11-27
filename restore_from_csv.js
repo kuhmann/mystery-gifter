@@ -30,10 +30,10 @@ fs.readFile('assignments.csv', 'utf8', function(err, data) {
 });
 
 function split(string,separator,n) {
-    var split = string.split(separator);
+    const split = string.split(separator);
     if (split.length <= n)
         return split;
-    var out = split.slice(0,n-1);
+    const out = split.slice(0,n-1);
     out.push(split.slice(n-1).join(separator));
     return out;
 }
