@@ -1,16 +1,26 @@
 const fs = require('fs');
 const buyers = {};
+
+// The format of this file is that it is tab-separated (watch your editor) and has the following fields:
+// 0: Buyer discord id 
+// 1: anything
+// 2: anything
+// 3: Recipient discord id
+// 4: Recipient hunter id
+// 5: Helper elf name
+// 6: Helper elf hunter id
 fs.readFile('notes/assignments.txt', 'utf8', function(err, data) {
-    // We have a tab-separated list
     const lines = data.split(/[\r\n]+/);
     console.log(`Recived: ${lines.length} lines`);
     lines.forEach(line => {
         const values = line.split(/\t/);
-        if (values && values[3]) {
+        if (values && values.length == 7) {
             buyers[values[3]] = {
                 'buyer': values[0],
                 'hunterId': values[4],
                 'wishlist': '',
+                'helper': values[5],
+                'helperId': values[6],
             };
         }
     });

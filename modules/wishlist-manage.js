@@ -87,16 +87,55 @@ function stalk(userId) {
         if (target) {
             const wish = wishlists[target].wishlist || 'None yet';
             wishlists[target].stalked = true;
-            return [`Your person is <@${target}> and they are Hunter`,
+            return [`Your person is <@${target}> and they are Hunter `,
                 `${wishlists[target].hunterId} - `,
                 `<https://mshnt.ca/p/${wishlists[target].hunterId}>`,
-                `\nTheir secret wish is for "${wish}"`].join('');
+                `\nTheir secret wish is for "${wish}"`,
+                `\nWhen you're ready, ||send your gift to ${wishlists[target].helper} `,
+                `at <https://mshnt.ca/p/${wishlists[target].helperId}>||`].join('');
         } else {
             return 'This is embarrassing, looks like we didn\'t assign you to anyone';
         }
     } else {
         return 'Sorry, looks like you aren\'t signed up';
     }
+}
+
+/**
+ * Toggle if you can be seen by the person you are buying for
+ * @param {Snowflake} userId - discord ID for the person running the command
+ * @returns Current status 
+ */
+function reveal(userId) {
+    if (userId in wishlists) {
+        //confirm they're registered
+        const target = Object.keys(wishlists).filter(registered => wishlists[registered]['buyer'] === userId)[0];
+        if (target) {
+            if ('can_see_santa' in wishlists[target]) {
+                wishlists[target].can_see_santa = !wishlists[target].can_see_santa;
+            } else {
+                wishlists[target].can_see_santa = true;
+            }
+            return wishlists[target].can_see_santa ? 'Your person can see who sent them a present' : 'You are hidden from your person';
+        } else {
+            return 'You seem to be participating but are not assigned to anyone yet';
+        }
+    }
+    return 'You do not appear to be participating';
+}
+
+function peek(userId) {
+    // To see who sent you something you must be registered.
+    // They must have set can_see_santa
+    if (userId in wishlists) {
+        if ('can_see_santa' in wishlists[userId] && wishlists[userId].can_see_santa) {
+            // The person has chosen to reveal themself
+            return `Your mystery gifter was none other than ||<@${wishlists[userId].buyer}>||!`;
+        } else {
+            return 'You tried your best but your mystery gifter will remain a mystery although you can try again later...';
+        }
+    }
+    return 'You do not appear to be participating';
 }
 
 async function dump_as_csv_string() {
@@ -117,12 +156,11 @@ async function dump_as_csv_string() {
     await saveDataAsCSV('assignments.csv', out_array);
     return 'Data saved';
 }
-
 exports.save = saveWishes;
 exports.loader = load; // I think this should be register
 exports.unloader = destroy; // I think this should be deregister
 exports.getWish = getWish;
 exports.stalk = stalk;
-exports.register = register;
-exports.deregister = deregister;
 exports.dump = dump_as_csv_string;
+exports.reveal = reveal;
+exports.peek = peek;
