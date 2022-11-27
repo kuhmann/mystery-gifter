@@ -86,10 +86,12 @@ function stalk(userId) {
         if (target) {
             const wish = wishlists[target].wishlist || 'None yet';
             wishlists[target].stalked = true;
-            return [`Your person is <@${target}> and they are Hunter`,
+            return [`Your person is <@${target}> and they are Hunter `,
                 `${wishlists[target].hunterId} - `,
                 `<https://mshnt.ca/p/${wishlists[target].hunterId}>`,
-                `\nTheir secret wish is for "${wish}"`].join('');
+                `\nTheir secret wish is for "${wish}"`,
+                `\nWhen you're ready, ||send your gift to ${wishlists[target].helper} `,
+                `at <https://mshnt.ca/p/${wishlists[target].helperId}>||`].join('');
         } else {
             return 'This is embarrassing, looks like we didn\'t assign you to anyone';
         }
@@ -144,4 +146,3 @@ exports.reveal = reveal;
 exports.peek = peek;
 exports.register = register;
 exports.deregister = deregister;
-
