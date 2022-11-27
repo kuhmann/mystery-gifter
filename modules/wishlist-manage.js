@@ -100,10 +100,49 @@ function stalk(userId) {
     }
 }
 
+/**
+ * Toggle if you can be seen by the person you are buying for
+ * @param {Snowflake} userId - discord ID for the person running the command
+ * @returns Current status 
+ */
+function reveal(userId) {
+    if (userId in wishlists) {
+        //confirm they're registered
+        const target = Object.keys(wishlists).filter(registered => wishlists[registered]['buyer'] === userId)[0];
+        if (target) {
+            if ('can_see_santa' in wishlists[target]) {
+                wishlists[target].can_see_santa = !wishlists[target].can_see_santa;
+            } else {
+                wishlists[target].can_see_santa = true;
+            }
+            return wishlists[target].can_see_santa ? 'Your person can see who sent them a present' : 'You are hidden from your person';
+        } else {
+            return 'You seem to be participating but are not assigned to anyone yet';
+        }
+    }
+    return 'You do not appear to be participating';
+}
+
+function peek(userId) {
+    // To see who sent you something you must be registered.
+    // They must have set can_see_santa
+    if (userId in wishlists) {
+        if ('can_see_santa' in wishlists[userId] && wishlists[userId].can_see_santa) {
+            // The person has chosen to reveal themself
+            return `Your mystery gifter was none other than ||<@${wishlists[userId].buyer}>||!`;
+        } else {
+            return 'You tried your best but your mystery gifter will remain a mystery although you can try again later...';
+        }
+    }
+    return 'You do not appear to be participating';
+}
+
 exports.save = saveWishes;
 exports.loader = load;
 exports.unloader = destroy;
 exports.getWish = getWish;
 exports.stalk = stalk;
-exports.register = register; // I think this should be instead of the loader
-exports.deregister = deregister; // I think this should be instead of the unloader
+exports.reveal = reveal;
+exports.peek = peek;
+exports.register = register;
+exports.deregister = deregister;
