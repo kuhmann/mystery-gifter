@@ -1,5 +1,5 @@
 
-const { loadDataFromJSON, saveDataAsJSON } = require('../modules/file-utils');
+const { loadDataFromJSON, saveDataAsJSON, saveDataAsCSV } = require('../modules/file-utils');
 
 const wishlist_filename = 'assignments.json';
 let data_updated = false;
@@ -55,9 +55,10 @@ async function loadWishes(path = wishlist_filename) {
 }
 
 async function saveWishes(path = wishlist_filename) {
-    if (data_updated) {
+    if (data_updated && wishlists) {
         const didSave = await saveDataAsJSON(path, wishlists);
         console.log(`Wishlists: ${didSave ? 'Saved' : 'Failed to save'} ${Object.keys(wishlists).length} to '${path}'`);
+        data_updated = false;
     }
 }
 
@@ -137,12 +138,29 @@ function peek(userId) {
     return 'You do not appear to be participating';
 }
 
+async function dump_as_csv_string() {
+    const out_array = [['person', 'buyer', 'hunterId', 'helper', 'helperId', 'stalked', 'can_see_santa', 'wishlist']];
+    for (const hunter in wishlists) {
+        out_array.push([
+            hunter,
+            wishlists[hunter].buyer,
+            wishlists[hunter].hunterId,
+            wishlists[hunter].helper,
+            wishlists[hunter].helperId,
+            'stalked' in wishlists[hunter],
+            'can_see_santa' in wishlists[hunter] ? wishlists[hunter].can_see_santa : false,
+            wishlists[hunter].wishlist,
+        ]);
+    }
+    // Build a long string of CSV
+    await saveDataAsCSV('assignments.csv', out_array);
+    return 'Data saved';
+}
 exports.save = saveWishes;
-exports.loader = load;
-exports.unloader = destroy;
+exports.loader = load; // I think this should be register
+exports.unloader = destroy; // I think this should be deregister
 exports.getWish = getWish;
 exports.stalk = stalk;
+exports.dump = dump_as_csv_string;
 exports.reveal = reveal;
 exports.peek = peek;
-exports.register = register;
-exports.deregister = deregister;
