@@ -1,22 +1,21 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { loader, unloader, getWish } = require('../modules/wishlist-manage');
+const { loader, unloader, dump } = require('../modules/wishlist-manage');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('elf-dump')
-        .setDescription('Help your mystery elf by giving them gift ideas')
-        .addStringOption(option => option.setName('wish')
-            .setDescription('Your gift wishes')
-            .setRequired(false))
+        .setDescription('Backup the elf database')
         .setDefaultMemberPermissions(0),
     async execute(interaction) {
-        const user = interaction.user;
-        const wish = interaction.options.getString('wish');
-        let reply = getWish(user.id, wish);
+        await interaction.deferReply();
+        const channelId = interaction.client.channelId;
+        const channel = interaction.client.channels.cache.get(channelId);
+        let reply = await dump();
         if (!reply) {
             reply = 'Sorry, there was an error';
         }
-        await interaction.reply({ content: reply, ephemeral: true });
+        await channel.send({ content: reply, files: ['./assignments.csv'] });
+        await interaction.editReply({ content: reply, ephemeral: true });
     },
     destroy: unloader,
     load: loader,
