@@ -67,7 +67,7 @@ function getWish(userId, wish) {
         const current_wish = wishlists[userId]['wishlist'];
         if (wish) {
             wishlists[userId]['wishlist'] = wish;
-            console.log(`set ${userId}'s wish to '${wish}'`)
+            console.log(`set ${userId}'s wish to '${wish}'`);
             data_updated = true;
             return 'Wishlist updated, your elf was not alerted';
         } else {
@@ -84,7 +84,7 @@ function stalk(userId) {
         // This means they registered
         const target = Object.keys(wishlists).filter(registered => wishlists[registered]['buyer'] === userId)[0];
         if (target) {
-            const wish = wishlists[target].wishlist || "None yet";
+            const wish = wishlists[target].wishlist || 'None yet';
             wishlists[target].stalked = true;
             return [`Your person is <@${target}> and they are Hunter`,
                 `${wishlists[target].hunterId} - `,
@@ -98,8 +98,14 @@ function stalk(userId) {
     }
 }
 
+function dump_as_csv_string() {
+    // Build a long string of CSV
+}
+
 exports.save = saveWishes;
-exports.loader = load;
-exports.unloader = destroy;
+exports.loader = load; // I think this should be register
+exports.unloader = destroy; // I think this should be deregister
 exports.getWish = getWish;
 exports.stalk = stalk;
+exports.register = register;
+exports.deregister = deregister;
