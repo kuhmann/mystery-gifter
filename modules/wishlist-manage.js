@@ -67,7 +67,7 @@ function getWish(userId, wish) {
         const current_wish = wishlists[userId]['wishlist'];
         if (wish) {
             wishlists[userId]['wishlist'] = wish;
-            console.log(`set ${userId}'s wish to '${wish}'`)
+            console.log(`set ${userId}'s wish to '${wish}'`);
             data_updated = true;
             return 'Wishlist updated, your elf was not alerted';
         } else {
@@ -84,12 +84,14 @@ function stalk(userId) {
         // This means they registered
         const target = Object.keys(wishlists).filter(registered => wishlists[registered]['buyer'] === userId)[0];
         if (target) {
-            const wish = wishlists[target].wishlist || "None yet";
+            const wish = wishlists[target].wishlist || 'None yet';
             wishlists[target].stalked = true;
-            return [`Your person is <@${target}> and they are Hunter`,
+            return [`Your person is <@${target}> and they are Hunter `,
                 `${wishlists[target].hunterId} - `,
                 `<https://mshnt.ca/p/${wishlists[target].hunterId}>`,
-                `\nTheir secret wish is for "${wish}"`].join('');
+                `\nTheir secret wish is for "${wish}"`,
+                `\nWhen you're ready, ||send your gift to ${wishlists[target].helper} `,
+                `at <https://mshnt.ca/p/${wishlists[target].helperId}>||`].join('');
         } else {
             return 'This is embarrassing, looks like we didn\'t assign you to anyone';
         }
@@ -103,3 +105,5 @@ exports.loader = load;
 exports.unloader = destroy;
 exports.getWish = getWish;
 exports.stalk = stalk;
+exports.register = register; // I think this should be instead of the loader
+exports.deregister = deregister; // I think this should be instead of the unloader
