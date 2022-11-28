@@ -20,6 +20,10 @@ module.exports = {
                     await channel.send({
                         content: `${user.id} aka <@${user.id}> is hunter id ${hunterId} which is <https://mshnt.ca/p/${hunterId}>`,
                     });
+                    await interaction.editReply({
+                        content: `Registered you with hunter id ${interaction.options.getString('hunterid')}`,
+                        ephemeral: true,
+                    });
                 } catch (error) {
                     console.error(`ELF-ME: ${user} had an error: ${error}`);
                     await interaction.editReply({
@@ -27,10 +31,6 @@ module.exports = {
                         ephemeral: true,
                     });
                 }
-                await interaction.editReply({
-                    content: `Registered you with ${interaction.options.getString('hunterid')}`,
-                    ephemeral: true,
-                });
             } else {
                 await interaction.reply({ content: 'Signups are no longer active, sorry', ephemeral: true });
             }
