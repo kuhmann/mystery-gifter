@@ -58,9 +58,7 @@ async function loadWishes(path = wishlist_filename) {
 }
 
 async function saveWishes(path = wishlist_filename) {
-    console.log(`Updated ${data_updated}, Wishlists ${Object.keys(wishlists).length}`);
     if (data_updated && Object.keys(wishlists).length) {
-        console.log('Running save');
         const didSave = await saveDataAsJSON(path, wishlists);
         console.log(`Wishlists: ${didSave ? 'Saved' : 'Failed to save'} ${Object.keys(wishlists).length} to '${path}'`);
         data_updated = false;
