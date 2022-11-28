@@ -91,7 +91,7 @@ function stalk(userId) {
                 `${wishlists[target].hunterId} - `,
                 `<https://mshnt.ca/p/${wishlists[target].hunterId}>`,
                 `\nTheir secret wish is for "${wish}"`,
-                `\nWhen you're ready, ||send your gift to ${wishlists[target].helper} `,
+                `\nWhen you're ready, ||send your gift to <@${wishlists[target].helperDiscordId}> `,
                 `at <https://mshnt.ca/p/${wishlists[target].helperId}>||`].join('');
         } else {
             return 'This is embarrassing, looks like we didn\'t assign you to anyone';
@@ -139,7 +139,7 @@ function peek(userId) {
 }
 
 async function dump_as_csv_string() {
-    const out_array = [['person', 'buyer', 'hunterId', 'helper', 'helperId', 'stalked', 'can_see_santa', 'wishlist']];
+    const out_array = [['person', 'buyer', 'hunterId', 'helper', 'helperId', 'helperDiscordId', 'stalked', 'can_see_santa', 'wishlist']];
     for (const hunter in wishlists) {
         out_array.push([
             hunter,
@@ -147,6 +147,7 @@ async function dump_as_csv_string() {
             wishlists[hunter].hunterId,
             wishlists[hunter].helper,
             wishlists[hunter].helperId,
+            wishlists[hunter].helperDiscordId,
             'stalked' in wishlists[hunter],
             'can_see_santa' in wishlists[hunter] ? wishlists[hunter].can_see_santa : false,
             wishlists[hunter].wishlist,
