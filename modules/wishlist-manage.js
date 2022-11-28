@@ -11,6 +11,7 @@ let file_save_interval;
 
 async function register() {
     clients = clients + 1;
+    console.log(`Registered command, ${clients} registered`);
     if (!initialized) {
         return await load();
     }
@@ -18,7 +19,8 @@ async function register() {
 
 async function deregister() {
     clients = clients - 1;
-    if (clients <= 0) {
+    console.log(`Deregistered command, ${clients} registered`);
+    if (clients === 0) {
         return await destroy();
     }
 }
@@ -39,7 +41,8 @@ async function load() {
 }
 
 async function destroy() {
-    saveDataAsJSON('assignments.json', wishlists);
+    console.log('Saving wishlist!');
+    await saveWishes();
     clearInterval(file_save_interval);
     initialized = false;
     return true;
@@ -55,7 +58,7 @@ async function loadWishes(path = wishlist_filename) {
 }
 
 async function saveWishes(path = wishlist_filename) {
-    if (data_updated && wishlists) {
+    if (data_updated && Object.keys(wishlists).length) {
         const didSave = await saveDataAsJSON(path, wishlists);
         console.log(`Wishlists: ${didSave ? 'Saved' : 'Failed to save'} ${Object.keys(wishlists).length} to '${path}'`);
         data_updated = false;
@@ -87,11 +90,12 @@ function stalk(userId) {
         if (target) {
             const wish = wishlists[target].wishlist || 'None yet';
             wishlists[target].stalked = true;
+            data_updated = true;
             return [`Your person is <@${target}> and they are Hunter `,
                 `${wishlists[target].hunterId} - `,
                 `<https://mshnt.ca/p/${wishlists[target].hunterId}>`,
                 `\nTheir secret wish is for "${wish}"`,
-                `\nWhen you're ready, ||send your gift to ${wishlists[target].helper} `,
+                `\nWhen you're ready, ||send your gift to <@${wishlists[target].helperDiscordId}> `,
                 `at <https://mshnt.ca/p/${wishlists[target].helperId}>||`].join('');
         } else {
             return 'This is embarrassing, looks like we didn\'t assign you to anyone';
@@ -116,6 +120,7 @@ function reveal(userId) {
             } else {
                 wishlists[target].can_see_santa = true;
             }
+            data_updated = true;
             return wishlists[target].can_see_santa ? 'Your person can see who sent them a present' : 'You are hidden from your person';
         } else {
             return 'You seem to be participating but are not assigned to anyone yet';
@@ -139,7 +144,7 @@ function peek(userId) {
 }
 
 async function dump_as_csv_string() {
-    const out_array = [['person', 'buyer', 'hunterId', 'helper', 'helperId', 'stalked', 'can_see_santa', 'wishlist']];
+    const out_array = [['person', 'buyer', 'hunterId', 'helper', 'helperId', 'helperDiscordId', 'stalked', 'can_see_santa', 'wishlist']];
     for (const hunter in wishlists) {
         out_array.push([
             hunter,
@@ -147,6 +152,7 @@ async function dump_as_csv_string() {
             wishlists[hunter].hunterId,
             wishlists[hunter].helper,
             wishlists[hunter].helperId,
+            wishlists[hunter].helperDiscordId,
             'stalked' in wishlists[hunter],
             'can_see_santa' in wishlists[hunter] ? wishlists[hunter].can_see_santa : false,
             wishlists[hunter].wishlist,

@@ -6,18 +6,18 @@ fs.readFile('assignments.csv', 'utf8', function(err, data) {
     lines.shift();
     console.log(`Recived: ${lines.length} lines`);
     lines.forEach(line => {
-        const values = split (line, ',', 8);
+        const values = split (line, ',', 9);
         if (values && values[3]) {
             buyers[values[0]] = {
                 'buyer': values[1],
                 'hunterId': values[2],
                 'helper': values[3],
                 'helperId': values[4],
-                'stalked': values[5],
-                'can_see_santa': values[6],
-                'wishlist': values[7],
+                'helperDiscordId': values[5],
+                'stalked': values[6] == 'true',
+                'can_see_santa': values[7] == 'true',
+                'wishlist': values[8],
             };
-            console.log(`Wishlist was: ${values[7]}`);
         }
     });
     fs.writeFile('notes/assignments2.json', JSON.stringify(buyers, null, 1), (err) => {

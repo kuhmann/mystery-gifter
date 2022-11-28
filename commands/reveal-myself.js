@@ -1,9 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { loader, unloader, reveal } = require('../modules/wishlist-manage');
+const { register, deregister, reveal } = require('../modules/wishlist-manage');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('reveal-myself')
+        .setName('reveal-me')
         .setDescription('Toggle whether your recipient can see who you are'),
     async execute(interaction) {
         const user = interaction.user;
@@ -13,7 +13,7 @@ module.exports = {
         }
         await interaction.reply({ content: reply, ephemeral: true });
     },
-    destroy: unloader,
-    load: loader,
+    destroy: deregister,
+    load: register,
 };
 
