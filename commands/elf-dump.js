@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { loader, unloader, dump } = require('../modules/wishlist-manage');
+const { register, deregister, dump } = require('../modules/wishlist-manage');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,7 +17,7 @@ module.exports = {
         await channel.send({ content: reply, files: ['./assignments.csv'] });
         await interaction.editReply({ content: reply, ephemeral: true });
     },
-    destroy: unloader,
-    load: loader,
+    destroy: deregister,
+    load: register,
 };
 

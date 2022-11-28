@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { stalk } = require('../modules/wishlist-manage');
+const { stalk, register, deregister } = require('../modules/wishlist-manage');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,5 +13,7 @@ module.exports = {
         }
         await interaction.reply({ content: reply, ephemeral: true });
     },
+    destroy: deregister,
+    load: register,
 };
 

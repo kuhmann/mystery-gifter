@@ -11,6 +11,7 @@ let file_save_interval;
 
 async function register() {
     clients = clients + 1;
+    console.log(`Registered command, ${clients} registered`);
     if (!initialized) {
         return await load();
     }
@@ -18,7 +19,8 @@ async function register() {
 
 async function deregister() {
     clients = clients - 1;
-    if (clients <= 0) {
+    console.log(`Deregistered command, ${clients} registered`);
+    if (clients === 0) {
         return await destroy();
     }
 }
@@ -39,7 +41,8 @@ async function load() {
 }
 
 async function destroy() {
-    saveDataAsJSON('assignments.json', wishlists);
+    console.log('Saving wishlist!');
+    await saveWishes();
     clearInterval(file_save_interval);
     initialized = false;
     return true;
@@ -55,7 +58,9 @@ async function loadWishes(path = wishlist_filename) {
 }
 
 async function saveWishes(path = wishlist_filename) {
-    if (data_updated && wishlists) {
+    console.log(`Updated ${data_updated}, Wishlists ${Object.keys(wishlists).length}`);
+    if (data_updated && Object.keys(wishlists).length) {
+        console.log('Running save');
         const didSave = await saveDataAsJSON(path, wishlists);
         console.log(`Wishlists: ${didSave ? 'Saved' : 'Failed to save'} ${Object.keys(wishlists).length} to '${path}'`);
         data_updated = false;
@@ -87,6 +92,7 @@ function stalk(userId) {
         if (target) {
             const wish = wishlists[target].wishlist || 'None yet';
             wishlists[target].stalked = true;
+            data_updated = true;
             return [`Your person is <@${target}> and they are Hunter `,
                 `${wishlists[target].hunterId} - `,
                 `<https://mshnt.ca/p/${wishlists[target].hunterId}>`,
@@ -116,6 +122,7 @@ function reveal(userId) {
             } else {
                 wishlists[target].can_see_santa = true;
             }
+            data_updated = true;
             return wishlists[target].can_see_santa ? 'Your person can see who sent them a present' : 'You are hidden from your person';
         } else {
             return 'You seem to be participating but are not assigned to anyone yet';
