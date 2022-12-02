@@ -14,9 +14,9 @@ fs.readFile('assignments.csv', 'utf8', function(err, data) {
                 'helper': values[3],
                 'helperId': values[4],
                 'helperDiscordId': values[5],
-                'stalked': values[6] == 'true',
-                'can_see_santa': values[7] == 'true',
-                'wishlist': values[8],
+                'stalked': values[6] === 'true',
+                'can_see_santa': values[7] === 'true',
+                'wishlist': values[8].slice(1, -1).replace(/""/g, '"'),
             };
         }
     });
