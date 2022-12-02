@@ -8,6 +8,7 @@ fs.readFile('assignments.csv', 'utf8', function(err, data) {
     lines.forEach(line => {
         const values = split (line, ',', 9);
         if (values && values[3]) {
+            const wl = (values[8].charAt(0) === '"' && values[8].charAt(values[8].length-1) === '"') ? values[8].slice(1, -1).replace(/""/g, '"') : values[8];
             buyers[values[0]] = {
                 'buyer': values[1],
                 'hunterId': values[2],
@@ -16,7 +17,7 @@ fs.readFile('assignments.csv', 'utf8', function(err, data) {
                 'helperDiscordId': values[5],
                 'stalked': values[6] === 'true',
                 'can_see_santa': values[7] === 'true',
-                'wishlist': values[8].slice(1, -1).replace(/""/g, '"'),
+                'wishlist': wl,
             };
         }
     });
