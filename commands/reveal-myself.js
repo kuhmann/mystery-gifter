@@ -3,7 +3,7 @@ const { register, deregister, reveal } = require('../modules/wishlist-manage');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('reveal-me')
+        .setName('visibility')
         .setDescription('Toggle whether your recipient can see who you are'),
     async execute(interaction) {
         const user = interaction.user;
