@@ -15,7 +15,11 @@ module.exports = {
         if (!reply) {
             reply = 'Sorry, there was an error';
         }
-        await interaction.reply({ content: reply, ephemeral: true });
+        try {
+            await interaction.reply({ content: reply, ephemeral: true });
+        } catch (e) {
+            console.log(`Wishlist: ${e}`);
+        }
     },
     destroy: deregister,
     load: register,
