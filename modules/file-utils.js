@@ -13,8 +13,11 @@ const file_encoding = 'utf8';
  * @returns {Promise <any>}  Data from the given file, as an object to be consumed by the caller.
  */
 async function loadDataFromJSON(filename) {
-    const data = await fs.readFile(filename, { encoding: file_encoding });
+    let data = await fs.readFile(filename, { encoding: file_encoding, flag: 'a+' });
     console.log(`I/O: data read from '${filename}'.`);
+    if (data === '') {
+        data = '{}';
+    }
     return JSON.parse(data);
 }
 
