@@ -5,6 +5,7 @@ const wishlist_filename = 'assignments.json';
 let data_updated = false;
 let clients = 0;
 let initialized = false;
+const save_interval = 1*60*1000; // Milliseconds
 
 const wishlists = {};
 let file_save_interval;
@@ -41,7 +42,7 @@ async function load() {
     }
     initialized = true;
     console.log('wl: loading wishlists');
-    file_save_interval = setInterval(() => saveWishes(), 1*60*1000);
+    file_save_interval = setInterval(() => saveWishes(), save_interval);
     console.log('wl: interval set');
     const wishes = await loadWishes();
     Object.assign(wishlists, wishes);
