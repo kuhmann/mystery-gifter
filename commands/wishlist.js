@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { register, deregister, getWish } = require('../modules/wishlist-manage');
 
 module.exports = {

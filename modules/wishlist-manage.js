@@ -5,9 +5,20 @@ const wishlist_filename = 'assignments.json';
 let data_updated = false;
 let clients = 0;
 let initialized = false;
+const save_interval = 1*60*1000; // Milliseconds
 
 const wishlists = {};
 let file_save_interval;
+const wishlist_entry = {
+    'buyer': '',
+    'hunterId': '',
+    'helper': '',
+    'helperId': '',
+    'helperDiscordId': '',
+    'stalked': false,
+    'can_see_santa': false,
+    'wishlist': '',
+};
 
 async function register() {
     clients = clients + 1;
@@ -25,14 +36,13 @@ async function deregister() {
     }
 }
 
-
 async function load() {
     if (initialized) {
         return true;
     }
     initialized = true;
     console.log('wl: loading wishlists');
-    file_save_interval = setInterval(() => saveWishes(), 1*60*1000);
+    file_save_interval = setInterval(() => saveWishes(), save_interval);
     console.log('wl: interval set');
     const wishes = await loadWishes();
     Object.assign(wishlists, wishes);
@@ -63,6 +73,84 @@ async function saveWishes(path = wishlist_filename) {
         console.log(`Wishlists: ${didSave ? 'Saved' : 'Failed to save'} ${Object.keys(wishlists).length} to '${path}'`);
         data_updated = false;
     }
+}
+
+/**
+ * Returns a hunter id if registered, false if not
+ * @param {Snowflake} userId - discord ID for the person running the command
+ * @returns Registered hunter Id or false
+ */
+function isRegistered(userId) {
+    // If registered return hunter Id. Else return false
+    if (userId in wishlists && 'hunterId' in wishlists[userId]) {
+        // User is registered
+        return wishlists[userId]['hunterId'];
+    }
+    return false;
+}
+
+/**
+ * Registers a hunter or updates their hunter ID if already registered
+ * @param {Snowflake} userId - discord ID for the person running the command
+ * @param {String} hunterId - hunter ID for the person or false if none provided
+ * @returns Array of registered hunter Id or false
+ */
+function registerUser(userId, hunterId) {
+    // Returns hunterId or false
+    if (userId in wishlists) {
+        if (hunterId) {
+            // Already registered, maybe changing their hunterId
+            if (hunterId !== wishlists[userId]['hunterId']) {
+                // Make sure hunterId isn't already registered on an account
+                const isRegistered = checkRegisteredHunterId(hunterId);
+                if (isRegistered && Array.isArray(isRegistered)) {
+                    if (isRegistered.length === 1 && isRegistered[0] === userId) {
+                        // Somehow I'm setting myself to myself again. That's ok
+                        wishlists[userId]['hunterId'] = hunterId;
+                        data_updated = true;
+                        return hunterId;
+                    } else if (isRegistered.length === 1 && isRegistered[0] !== userId) {
+                        // Someone else is using this hunter id
+                        return false;
+                    } else {
+                        // Nobody else is using this hunter id. Or many others are using this hunter id.
+                        wishlists[userId]['hunterId'] = hunterId;
+                        data_updated = true;
+                        return hunterId;
+                    }
+                }
+                wishlists[userId]['hunterId'] = hunterId;
+                data_updated = true;
+                return hunterId;
+            }
+        } else {
+            if ('hunterId' in wishlists[userId] && wishlists[userId]['hunterId']) {
+                data_updated = true;
+                return wishlists[userId]['hunterId'];
+            } else {
+                return false;
+            }
+        }
+    } else {
+        if (hunterId) {
+            const isRegistered = checkRegisteredHunterId(hunterId);
+            if (isRegistered.length) {
+                return false;
+            } else {
+                // Create a new, empty user
+                wishlists[userId] = wishlist_entry;
+                wishlists[userId]['hunterId'] = hunterId;
+                data_updated = true;
+                return [hunterId];
+            }
+        } else {
+            return false;
+        }
+    }
+}
+
+function checkRegisteredHunterId(hunterId) {
+    return Object.keys(wishlists).filter(registered => wishlists[registered]['hunterId'] === hunterId);
 }
 
 function getWish(userId, wish) {
@@ -172,3 +260,5 @@ exports.reveal = reveal;
 exports.peek = peek;
 exports.register = register;
 exports.deregister = deregister;
+exports.registerUser = registerUser;
+exports.isRegistered = isRegistered;

@@ -1,8 +1,8 @@
 const fs = require('fs');
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token, channelId, signupsActive } = require('./config.json');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 let is_exiting = false;
 
 client.commands = new Collection();
@@ -21,12 +21,12 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-client.once('ready', () => {
+client.once(Events.ClientReady, () => {
     console.log('Ready!');
 });
 
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand()) return;
+client.on(Events.InteractionCreate, async interaction => {
+    if (!interaction.isChatInputCommand()) return;
 
     const command = client.commands.get(interaction.commandName);
 
@@ -36,12 +36,18 @@ client.on('interactionCreate', async interaction => {
         await command.execute(interaction);
     } catch (error) {
         console.error(error);
+        if (interaction.replied || interaction.deferred) {
+            await interaction.followUp({ content: 'I had a whoopsie!', ephemeral: true });
+        } else {
+            await interaction.reply({ content: 'I had a whoopsie-doodle!', ephemeral: true });
+        }
         // return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
     }
 });
 
 client.login(token);
 
+// Async functions aren't allowed here... so this will never run
 async function exitHandler(options, exitCode) {
     if (is_exiting) {
         console.log('Already exiting');
