@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { loader, unloader, getWish } = require('../modules/wishlist-manage');
+const { SlashCommandBuilder } = require('discord.js');
+const { register, deregister, getWish } = require('../modules/wishlist-manage');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,9 +15,13 @@ module.exports = {
         if (!reply) {
             reply = 'Sorry, there was an error';
         }
-        await interaction.reply({ content: reply, ephemeral: true });
+        try {
+            await interaction.reply({ content: reply, ephemeral: true });
+        } catch (e) {
+            console.log(`Wishlist: ${e}`);
+        }
     },
-    destroy: unloader,
-    load: loader,
+    destroy: deregister,
+    load: register,
 };
 

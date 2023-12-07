@@ -1,20 +1,20 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { stalk, register, deregister } = require('../modules/wishlist-manage');
+const { register, deregister, reveal } = require('../modules/wishlist-manage');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('elf-vision')
-        .setDescription('See what your person is "secretly" wishing for.'),
+        .setName('visibility')
+        .setDescription('Toggle whether your recipient can see who you are'),
     async execute(interaction) {
         const user = interaction.user;
-        let reply = stalk(user.id);
+        let reply = reveal(user.id);
         if (!reply) {
             reply = 'Sorry, there was an error';
         }
         try {
             await interaction.reply({ content: reply, ephemeral: true });
         } catch (e) {
-            console.log(`Elf-vision: ${e}`);
+            console.log(`Reveal: ${e}`);
         }
     },
     destroy: deregister,

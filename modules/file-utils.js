@@ -13,8 +13,11 @@ const file_encoding = 'utf8';
  * @returns {Promise <any>}  Data from the given file, as an object to be consumed by the caller.
  */
 async function loadDataFromJSON(filename) {
-    const data = await fs.readFile(filename, { encoding: file_encoding });
+    let data = await fs.readFile(filename, { encoding: file_encoding, flag: 'a+' });
     console.log(`I/O: data read from '${filename}'.`);
+    if (data === '') {
+        data = '{}';
+    }
     return JSON.parse(data);
 }
 
@@ -39,5 +42,27 @@ async function saveDataAsJSON(filename, rawData) {
     }
 }
 
+/**
+ * Generic Promise-based file write.
+ * Returns true if the file was written without error.
+ * Returns false if an error occurred. Depending on the error, the data may have been written anyway.
+ *
+ * @param {string} filename the name of a file in the current working directory (or a path and the name)
+ *                          to which data will be serialized as JSON.
+ * @param {any} rawData raw object data which is an array of arrays
+ * @returns {Promise <boolean>} The result of the save request (false negatives possible).
+ */
+async function saveDataAsCSV(filename, rawData) {
+    try {
+        await fs.writeFile(filename, rawData.map(a => a.toString()).join('\n'), { encoding: file_encoding });
+        console.log(`I/O: data written to '${filename}'.`);
+        return true;
+    } catch (err) {
+        console.error(`I/O: error writing to '${filename}':\n`, err);
+        return false;
+    }
+}
+
 exports.loadDataFromJSON = loadDataFromJSON;
 exports.saveDataAsJSON = saveDataAsJSON;
+exports.saveDataAsCSV = saveDataAsCSV;
