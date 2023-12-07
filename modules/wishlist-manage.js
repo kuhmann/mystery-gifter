@@ -112,6 +112,9 @@ function registerUser(userId, hunterId) {
                     } else if (isRegistered.length === 1 && isRegistered[0] !== userId) {
                         // Someone else is using this hunter id
                         return false;
+                    } else if (isRegistered.length > 1) {
+                        console.log(`There are too many users registered with this hunter id [${hunterId}]: ${isRegistered}`);
+                        return false;
                     } else {
                         // Nobody else is using this hunter id. Or many others are using this hunter id.
                         wishlists[userId]['hunterId'] = hunterId;
