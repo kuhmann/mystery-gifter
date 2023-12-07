@@ -128,7 +128,6 @@ function registerUser(userId, hunterId) {
             }
         } else {
             if ('hunterId' in wishlists[userId] && wishlists[userId]['hunterId']) {
-                data_updated = true;
                 return wishlists[userId]['hunterId'];
             } else {
                 return false;
@@ -141,7 +140,7 @@ function registerUser(userId, hunterId) {
                 return false;
             } else {
                 // Create a new, empty user
-                wishlists[userId] = wishlist_entry;
+                wishlists[userId] = { ... wishlist_entry };
                 wishlists[userId]['hunterId'] = hunterId;
                 data_updated = true;
                 return [hunterId];
