@@ -24,7 +24,7 @@ module.exports = {
                         if (registered) {
                             try {
                                 await channel.send({
-                                    content: `${user.id} aka <@${user.id}> CHANGED their hunter id from ${alreadyRegistered} to ${hunterId} which is <https://mshnt.ca/p/${hunterId}>`,
+                                    content: `${user.id} aka <@${user.id}> CHANGED their hunter id from ${alreadyRegistered} to ${hunterId} which is <https://p.mshnt.ca/${hunterId}>`,
                                 });
                                 await interaction.editReply({
                                     content: `You changed from ${alreadyRegistered} to hunter id ${registered}`,
@@ -106,10 +106,10 @@ module.exports = {
                         if (Array.isArray(registered) && registered.length === 1 && registered[0] === hunterId) {
                             try {
                                 await channel.send({
-                                    content: `${user.id} aka <@${user.id}> registered as ${hunterId} which is <https://mshnt.ca/p/${hunterId}>`,
+                                    content: `${user.id} aka <@${user.id}> registered as ${hunterId} which is <https://p.mshnt.ca/${hunterId}>`,
                                 });
                                 await interaction.editReply({
-                                    content: `You registered as ${registered}. That's <https://mshnt.ca/p/${registered}>. Please double-check, then you can set your wishlist.`,
+                                    content: `You registered as ${registered}. That's <https://p.mshnt.ca/${registered}>. Please double-check, then you can set your wishlist.`,
                                     ephemeral: true,
                                 });
                             } catch (error) {

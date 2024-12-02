@@ -183,10 +183,10 @@ function stalk(userId) {
             data_updated = true;
             return [`Your person is <@${target}> and they are Hunter `,
                 `${wishlists[target].hunterId} - `,
-                `<https://mshnt.ca/p/${wishlists[target].hunterId}>`,
+                `<https://p.mshnt.ca/${wishlists[target].hunterId}>`,
                 `\nTheir secret wish is for "${wish}"`,
                 `\nWhen you're ready, ||send your gift to <@${wishlists[target].helperDiscordId}> `,
-                `at <https://mshnt.ca/p/${wishlists[target].helperId}>||`].join('');
+                `at <https://p.mshnt.ca/${wishlists[target].helperId}>||`].join('');
         } else {
             return 'This is embarrassing, looks like we didn\'t assign you to anyone';
         }
