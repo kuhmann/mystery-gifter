@@ -5,13 +5,13 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('elf-me')
         .setDescription('Registers for the mystery gift program!')
-        .addStringOption(option => option.setName('hunterid')
+        .addIntegerOption(option => option.setName('hunterid')
             .setDescription('Your Hunter ID')),
     async execute(interaction) {
         const user = interaction.user;
         const channelId = interaction.client.channelId;
         const channel = interaction.client.channels.cache.get(channelId);
-        const hunterId = interaction.options.getString('hunterid');
+        const hunterId = interaction.options.getInteger('hunterid').toString();
         const signupsActive = interaction.client.signupsActive;
         if (channel) {
             if (signupsActive) {
