@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { registerUser, isRegistered } = require('../modules/wishlist-manage');
+const { registerUser, isRegistered, register, deregister } = require('../modules/wishlist-manage');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -162,4 +162,6 @@ module.exports = {
             });
         }
     },
+    destroy: deregister,
+    load: register,
 };
