@@ -6,7 +6,7 @@ module.exports = {
         .setName('elf-me')
         .setDescription('Registers for the mystery gift program!')
         .addIntegerOption(option => option.setName('hunterid')
-            .setDescription('Your Hunter ID')),
+            .setDescription('Your Hunter ID').setRequired(true)),
     async execute(interaction) {
         const user = interaction.user;
         const channelId = interaction.client.channelId;
