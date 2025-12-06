@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { register, deregister, getWish } = require('../modules/wishlist-manage');
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
             reply = 'Sorry, there was an error';
         }
         try {
-            await interaction.reply({ content: reply, ephemeral: true });
+            await interaction.reply({ content: reply, flags: MessageFlags.Ephemeral });
         } catch (e) {
             console.log(`Wishlist: ${e}`);
         }

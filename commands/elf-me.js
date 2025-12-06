@@ -1,5 +1,7 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { registerUser, isRegistered, register, deregister } = require('../modules/wishlist-manage');
+
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,7 +17,7 @@ module.exports = {
         const signupsActive = interaction.client.signupsActive;
         if (channel) {
             if (signupsActive) {
-                await interaction.deferReply({ ephemeral: true });
+                await interaction.deferReply({ flags: MessageFlags.Ephemeral });
                 const alreadyRegistered = isRegistered(user.id);
                 if (alreadyRegistered) {
                     if (hunterId && hunterId !== alreadyRegistered) {
@@ -28,13 +30,13 @@ module.exports = {
                                 });
                                 await interaction.editReply({
                                     content: `You changed from ${alreadyRegistered} to hunter id ${registered}`,
-                                    ephemeral: true,
+                                    flags: MessageFlags.Ephemeral,
                                 });
                             } catch (error) {
                                 console.error(`ELF-ME: ${user} had an error: ${error}`);
                                 await interaction.editReply({
                                     content: 'There was an error, sorry',
-                                    ephemeral: true,
+                                    flags: MessageFlags.Ephemeral,
                                 });
                             }
                         } else {
@@ -45,13 +47,13 @@ module.exports = {
                                 });
                                 await interaction.editReply({
                                     content: `You are still registered as ${alreadyRegistered} because I could not change you to ${hunterId}`,
-                                    ephemeral: true,
+                                    flags: MessageFlags.Ephemeral,
                                 });
                             } catch (error) {
                                 console.error(`ELF-ME: ${user} had an error: ${error}`);
                                 await interaction.editReply({
                                     content: 'There was an error, sorry',
-                                    ephemeral: true,
+                                    flags: MessageFlags.Ephemeral,
                                 });
                             }
                         }
@@ -60,26 +62,26 @@ module.exports = {
                         try {
                             await interaction.editReply({
                                 content: `You are still registered as ${hunterId}`,
-                                ephemeral: true,
+                                flags: MessageFlags.Ephemeral,
                             });
                         } catch (error) {
                             console.error(`ELF-ME: ${user} had an error: ${error}`);
                             await interaction.editReply({
                                 content: 'There was an error, sorry',
-                                ephemeral: true,
+                                flags: MessageFlags.Ephemeral,
                             });
                         }
                     } else if (alreadyRegistered) {
                         try {
                             await interaction.editReply({
                                 content: `You are registered as ${alreadyRegistered}`,
-                                ephemeral: true,
+                                flags: MessageFlags.Ephemeral,
                             });
                         } catch (error) {
                             console.error(`ELF-ME: ${user} had an error: ${error}`);
                             await interaction.editReply({
                                 content: 'There was an error, sorry',
-                                ephemeral: true,
+                                flags: MessageFlags.Ephemeral,
                             });
                         }
                     } else {
@@ -89,13 +91,13 @@ module.exports = {
                             });
                             await interaction.editReply({
                                 content: 'Somehow you registered without a hunterId which should not be possible. I\'ve alerted the authorities but you should also contact a helper or Modmail.',
-                                ephemeral: true,
+                                flags: MessageFlags.Ephemeral,
                             });
                         } catch (error) {
                             console.error(`ELF-ME: ${user} had an error: ${error}`);
                             await interaction.editReply({
                                 content: 'There was an error, sorry',
-                                ephemeral: true,
+                                flags: MessageFlags.Ephemeral,
                             });
                         }
                     }
@@ -110,13 +112,13 @@ module.exports = {
                                 });
                                 await interaction.editReply({
                                     content: `You registered as ${registered}. That's <https://p.mshnt.ca/${registered}>. Please double-check, then you can set your wishlist.`,
-                                    ephemeral: true,
+                                    flags: MessageFlags.Ephemeral,
                                 });
                             } catch (error) {
                                 console.error(`ELF-ME: ${user} had an error: ${error}`);
                                 await interaction.editReply({
                                     content: 'There was an error, sorry',
-                                    ephemeral: true,
+                                    flags: MessageFlags.Ephemeral,
                                 });
                             }
                         } else {
@@ -126,13 +128,13 @@ module.exports = {
                                 });
                                 await interaction.editReply({
                                     content: 'Registration failed for some reason. We let the helpers know but you can try modmail if you haven\'t heard from them',
-                                    ephemeral: true,
+                                    flags: MessageFlags.Ephemeral,
                                 });
                             } catch (error) {
                                 console.error(`ELF-ME: ${user} had an error: ${error}`);
                                 await interaction.editReply({
                                     content: 'There was an error, sorry',
-                                    ephemeral: true,
+                                    flags: MessageFlags.Ephemeral,
                                 });
                             }
                         }
@@ -140,25 +142,25 @@ module.exports = {
                         try {
                             await interaction.editReply({
                                 content: 'You are not registered. To register you will need to provide your hunterId',
-                                ephemeral: true,
+                                flags: MessageFlags.Ephemeral,
                             });
                         } catch (error) {
                             console.error(`ELF-ME: ${user} had an error: ${error}`);
                             await interaction.followUp({
                                 content: 'There was an error, sorry',
-                                ephemeral: true,
+                                flags: MessageFlags.Ephemeral,
                             });
                         }
                     }
                 }
             } else {
-                await interaction.reply({ content: 'Signups are not active, sorry', ephemeral: true });
+                await interaction.reply({ content: 'Signups are not active, sorry', flags: MessageFlags.Ephemeral });
             }
         } else {
             console.error(`Couldn't find channel ${channelId}`);
             await interaction.reply({
                 content: 'Sorry, this bot isn\'t set up right',
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
     },

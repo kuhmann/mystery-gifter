@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags } = require('discord.js');
 const { register, deregister, dump } = require('../modules/wishlist-manage');
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
             reply = 'Sorry, there was an error';
         }
         await channel.send({ content: reply, files: ['./assignments.csv'] });
-        await interaction.editReply({ content: reply, ephemeral: true });
+        await interaction.editReply({ content: reply, flags: MessageFlags.Ephemeral });
     },
     destroy: deregister,
     load: register,
